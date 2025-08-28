@@ -1,0 +1,33 @@
+run:
+  timeout: 5m
+  tests: true
+
+linters:
+  enable:
+    - govet
+    - staticcheck
+    - errcheck
+    - gosimple
+    - unused
+    - revive
+    - ineffassign
+    - gocyclo
+    - typecheck
+    - asasalint
+    - bodyclose
+    - gosec
+    - gofmt
+    - gci
+
+linters-settings:
+  gci:
+    sections:
+      - standard
+      - default
+      - prefix(github.com/beevik/ntp)
+      - blank
+      - dot
+
+issues:
+  max-issues-per-linter: 100
+  max-same-issues: 5
