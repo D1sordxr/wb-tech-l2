@@ -10,4 +10,6 @@ func main() {
 	cfg.Setup()
 
 	fmt.Println(cfg)
+
+	// TODO
 }
