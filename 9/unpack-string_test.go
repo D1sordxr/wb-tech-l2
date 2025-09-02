@@ -98,7 +98,7 @@ var testCases = []struct {
 func BenchmarkUnpackOriginal(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for _, tc := range testCases {
-			optimizedForLongStrings(tc.input)
+			_, _ = optimizedForLongStrings(tc.input)
 		}
 	}
 }
@@ -106,7 +106,7 @@ func BenchmarkUnpackOriginal(b *testing.B) {
 func BenchmarkUnpackOptimized(b *testing.B) {
 	for i := 0; i < b.N; i++ {
 		for _, tc := range testCases {
-			optimizedForLongStrings(tc.input)
+			_, _ = optimizedForLongStrings(tc.input)
 		}
 	}
 }
@@ -115,7 +115,7 @@ func BenchmarkUnpackOriginalLong(b *testing.B) {
 	longInput := "a10b20c30d40e50f60g70h80i90j100"
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		UnpackString(longInput)
+		_, _ = UnpackString(longInput)
 	}
 }
 
@@ -123,7 +123,7 @@ func BenchmarkUnpackOptimizedLong(b *testing.B) {
 	longInput := "a10b20c30d40e50f60g70h80i90j100"
 	b.ResetTimer()
 	for i := 0; i < b.N; i++ {
-		optimizedForLongStrings(longInput)
+		_, _ = optimizedForLongStrings(longInput)
 	}
 }
 
