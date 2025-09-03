@@ -7,7 +7,7 @@ import (
 	"os"
 )
 
-type Service struct {
+type Service struct { // omitted
 	filePath string
 }
 

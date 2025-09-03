@@ -2,11 +2,11 @@ package cmd
 
 import (
 	"fmt"
+	"github.com/spf13/cobra"
+	"io"
 	"os"
 	"wb-tech-l2/12/go-grep/internal/config"
-	"wb-tech-l2/12/go-grep/internal/reader"
-
-	"github.com/spf13/cobra"
+	"wb-tech-l2/12/go-grep/internal/grep"
 )
 
 var (
@@ -71,12 +71,22 @@ func mustSetupPattern(args []string) {
 func runApp(_ *cobra.Command, args []string) {
 	mustSetupPattern(args)
 
-	_, err := reader.NewService(appConfig.FilePath).ReadLines()
-	if err != nil {
-		exitWithErrorMessage(err.Error())
+	var reader io.ReadCloser
+	if appConfig.FilePath == "" {
+		reader = os.Stdin
+		fmt.Println("Reading text from STDIN. Enter text (press Ctrl+D to finish):")
+	} else {
+		file, err := os.Open(appConfig.FilePath)
+		if err != nil {
+			exitWithErrorMessage(err.Error())
+		}
+		defer func() { _ = file.Close() }()
+		reader = file
 	}
 
-	// TODO main service
+	if err := grep.NewService(appConfig).Process(reader, os.Stdout); err != nil {
+		exitWithErrorMessage(err.Error())
+	}
 }
 
 func Execute() {
