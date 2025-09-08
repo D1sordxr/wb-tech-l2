@@ -2,11 +2,12 @@ package cmd
 
 import (
 	"fmt"
-	"github.com/spf13/cobra"
 	"io"
 	"os"
 	"wb-tech-l2/12/go-grep/internal/config"
 	"wb-tech-l2/12/go-grep/internal/grep"
+
+	"github.com/spf13/cobra"
 )
 
 var (

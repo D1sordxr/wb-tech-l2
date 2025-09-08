@@ -21,7 +21,7 @@ func HandleCommand(command string, args []string, w io.Writer) error {
 	if c, ok := validCommands[command]; ok {
 		return c(args, w)
 	}
-	return fmt.Errorf("command not found: %s", command)
+	return fmt.Errorf("command %s: %w", command, errInvalidCommand)
 }
 
 func echo(args []string, w io.Writer) error {

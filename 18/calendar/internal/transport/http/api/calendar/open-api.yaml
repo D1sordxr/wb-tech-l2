@@ -1,0 +1,354 @@
+openapi: "3.0.0"
+info:
+  title: "Calendar API"
+  version: "0.0.1"
+  description: "API Specification for Calendar Events"
+
+paths:
+  /create_event:
+    post:
+      summary: "Create new event"
+      description: "Create a new calendar event"
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/CreateEventRequest"
+      responses:
+        '200':
+          description: "Event created successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '503':
+          description: "Business logic error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+  /update_event:
+    post:
+      summary: "Update event"
+      description: "Update existing calendar event"
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateEventRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/UpdateEventRequest"
+      responses:
+        '200':
+          description: "Event updated successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '503':
+          description: "Business logic error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+  /delete_event:
+    post:
+      summary: "Delete event"
+      description: "Delete calendar event by ID"
+      tags:
+        - Events
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/DeleteEventRequest"
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: "#/components/schemas/DeleteEventRequest"
+      responses:
+        '200':
+          description: "Event deleted successfully"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SuccessResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '503':
+          description: "Business logic error"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+  /events_for_day:
+    get:
+      summary: "Get events for day"
+      description: "Get all events for specific day"
+      tags:
+        - Events
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+        - name: date
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-01-15"
+          description: "Date in YYYY-MM-DD format"
+      responses:
+        '200':
+          description: "List of events for the day"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsListResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+  /events_for_week:
+    get:
+      summary: "Get events for week"
+      description: "Get all events for specific week"
+      tags:
+        - Events
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+        - name: date_start
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-01-15"
+          description: "Start date of the week in YYYY-MM-DD format"
+      responses:
+        '200':
+          description: "List of events for the week"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsListResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+  /events_for_month:
+    get:
+      summary: "Get events for month"
+      description: "Get all events for specific month"
+      tags:
+        - Events
+      parameters:
+        - name: user_id
+          in: query
+          required: true
+          schema:
+            type: string
+          description: "User ID"
+        - name: date_start
+          in: query
+          required: true
+          schema:
+            type: string
+            format: date
+            example: "2024-01-15"
+          description: "Start date of the month in YYYY-MM-DD format"
+      responses:
+        '200':
+          description: "List of events for the month"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/EventsListResponse"
+        '400':
+          description: "Bad request"
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+        '500':
+          description: "Internal server error"
+
+components:
+  schemas:
+    CreateEventRequest:
+      type: object
+      required:
+        - user_id
+        - date
+        - event
+      properties:
+        user_id:
+          type: string
+          example: "uuid"
+          description: "User identifier"
+        date:
+          type: string
+          format: date
+          example: "2024-01-15"
+          description: "Event date in YYYY-MM-DD format"
+        event:
+          type: string
+          example: "Meeting with client"
+          description: "Event description/text"
+
+    UpdateEventRequest:
+      type: object
+      required:
+        - id
+        - user_id
+        - date
+        - event
+      properties:
+        id:
+          type: string
+          example: "uuid"
+          description: "Event identifier"
+        user_id:
+          type: string
+          example: "uuid"
+          description: "User identifier"
+        date:
+          type: string
+          format: date
+          example: "2024-01-15"
+          description: "Event date in YYYY-MM-DD format"
+        event:
+          type: string
+          example: "Updated meeting description"
+          description: "Event description/text"
+
+    DeleteEventRequest:
+      type: object
+      required:
+        - id
+        - user_id
+      properties:
+        id:
+          type: string
+          example: "uuid"
+          description: "Event identifier"
+        user_id:
+          type: string
+          example: 1
+          description: "User identifier"
+
+    EventsListResponse:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          type: array
+          items:
+            $ref: "#/components/schemas/CalendarEvent"
+          description: "List of events"
+
+    CalendarEvent:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "uuid"
+          description: "Event identifier"
+        user_id:
+          type: string
+          example: "uuid"
+          description: "User identifier"
+        date:
+          type: string
+          format: date
+          example: "2024-01-15"
+          description: "Event date"
+        event:
+          type: string
+          example: "Meeting with client"
+          description: "Event description"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-10T10:00:00Z"
+          description: "Creation timestamp"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-10T10:00:00Z"
+          description: "Last update timestamp"
+
+    SuccessResponse:
+      type: object
+      required:
+        - result
+      properties:
+        result:
+          type: string
+          example: "Event created successfully"
+          description: "Success message"
+
+    ErrorResponse:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: string
+          example: "Event not found"
+          description: "Error message description"
